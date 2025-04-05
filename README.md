@@ -1,14 +1,12 @@
 ## Шаг 1: Подготовка обучающей выборки, нормализация данных и преобразование в векторы
-\```
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
-\```
 
-X_train = X_train.reshape(-1, 28*28) / 255.0 
-X_test = X_test.reshape(-1, 28*28) / 255.0
-y_train = to_categorical(y_train, 10)
-y_test = to_categorical(y_test, 10)
+`(X_train, y_train), (X_test, y_test) = mnist.load_data()`
+`X_train = X_train.reshape(-1, 28*28) / 255.0`
+`X_test = X_test.reshape(-1, 28*28) / 255.0`
+`y_train = to_categorical(y_train, 10)`
+`y_test = to_categorical(y_test, 10)`
 
-Шаг 2-3: Задание параметров обучения, инициализация весов и смещений случайными малыми значениями
+## Шаг 2-3: Задание параметров обучения, инициализация весов и смещений случайными малыми значениями
 input_size = 28*28 
 output_size = 10 
 learning_rate = 0.2
