@@ -146,3 +146,37 @@ print(test_acc)
 - неудачная архитектура сети (50-50-10...)
 - слишком большое значение скорости обучения
 - неподходящая функция активации
+
+### Чтобы точность была < 0.9, нужно learning rate задать по дефолту и смещения инициализировать не нулями
+```python
+from tensorflow.keras import initializers
+
+# Инициализируем веса для каждого слоя
+first_weights = np.random.uniform(-0.3, 0.3, (28*28, 50))
+weights_50_50 = np.random.uniform(-0.3, 0.3, (50, 50))
+weights_50_10 = np.random.uniform(-0.3, 0.3, (50, 10))
+weights_10_50 = np.random.uniform(-0.3, 0.3, (10, 50))
+
+# Опишем архитектуру новой сети
+model__new = Sequential()
+model__new.add(Dense(50, kernel_initializer = first_weights, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), input_dim=28*28, activation='sigmoid'))
+model__new.add(Dense(50, kernel_initializer = weights_50_50, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+model__new.add(Dense(10, kernel_initializer = weights_50_10, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+
+model__new.add(Dense(50, kernel_initializer = weights_10_50, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+model__new.add(Dense(50, kernel_initializer = weights_50_50, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+model__new.add(Dense(10, kernel_initializer = weights_50_10, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3),  activation='sigmoid'))
+
+model__new.add(Dense(50, kernel_initializer = weights_10_50, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3),  activation='sigmoid'))
+model__new.add(Dense(50, kernel_initializer = weights_50_50, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+model__new.add(Dense(10, kernel_initializer = weights_50_10, bias_initializer=initializers.RandomUniform(minval=-0.3, maxval=0.3), activation='sigmoid'))
+
+model__new.compile(loss='categorical_crossentropy', optimizer=optimizers.Adam(), metrics=['accuracy'])
+model__new.fit(x_train, y_train, epochs=10, validation_split=0.1)
+
+_, test_acc = model__new.evaluate(x_test, y_test)
+print(test_acc)
+```
+
+### Результат
+<img width="1011" alt="Снимок экрана 2025-04-12 в 22 35 45" src="https://github.com/user-attachments/assets/3ca089e9-8a86-477c-8388-dafb4b8291ea" />
